@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sözleşme Dedektifi</title>
+  <meta name="description" content="Sözleşme ve gizlilik metinlerinde riskleri yapay zeka ile hızlıca tespit edin." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            detective: {
+              dark: '#1e293b',
+              deeper: '#0f172a',
+              accent: '#f59e0b',
+              trust: '#3b82f6',
+            },
+          },
+          fontFamily: {
+            sans: ['system-ui', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
+  <div class="mx-auto flex min-h-screen max-w-4xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+    <header class="mb-8 border-b border-slate-700 pb-6">
+      <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+        <div
+          class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/15 via-slate-800 to-blue-600/20 shadow-lg shadow-amber-900/20"
+          aria-hidden="true"
+        >
+          <svg class="h-9 w-9 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+          </svg>
+        </div>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-2xl font-bold tracking-tight text-amber-400 sm:text-3xl">
+            Sözleşme Dedektifi
+          </h1>
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
+            Uzun kullanıcı sözleşmeleri ve gizlilik politikalarını yapıştırın veya fotoğraf/PDF yükleyin; yapay zeka özetler, olası
+            <span class="inline-flex items-center gap-1 font-medium text-red-400">
+              <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5m0 0V21m0-16.5h13.5a1.5 1.5 0 0 1 1.5 1.5v4.5a1.5 1.5 0 0 1-1.5 1.5H3z" />
+              </svg>
+              kırmızı bayrakları
+            </span>
+            listeler ve metni sade bir dille açıklar.
+            <span class="mt-2 flex items-start gap-2 rounded-lg border border-slate-700/80 bg-slate-800/40 px-3 py-2 text-xs text-slate-500">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+              </svg>
+              <span>Bu araç hukuki tavsiye niteliği taşımaz.</span>
+            </span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex flex-1 flex-col gap-6">
+      <section aria-labelledby="api-key-heading" class="rounded-xl border border-slate-700 bg-slate-800/50 p-4 sm:p-5">
+        <h2 id="api-key-heading" class="sr-only">API anahtarı ve model seçimi</h2>
+        <label for="api-key" class="mb-3 flex items-center gap-2 text-sm font-medium text-slate-300">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400" aria-hidden="true">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+            </svg>
+          </span>
+          Google AI Studio Gemini API anahtarı
+        </label>
+        <div class="relative">
+          <span class="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-slate-500" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+          </span>
+          <input
+            id="api-key"
+            name="api-key"
+            type="password"
+            autocomplete="off"
+            placeholder="Anahtarınızı buraya yapıştırın"
+            class="w-full rounded-lg border border-slate-600 bg-slate-900 py-2.5 pl-11 pr-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          />
+        </div>
+
+        <label for="model-select" class="mb-2 mt-4 flex items-center gap-2 text-sm font-medium text-slate-300">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400" aria-hidden="true">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          </span>
+          Gemini modeli
+        </label>
+        <select
+          id="model-select"
+          name="model-select"
+          class="w-full rounded-lg border border-slate-600 bg-slate-900 px-3 py-2.5 text-sm text-slate-100 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+          aria-describedby="api-help"
+        >
+          <optgroup label="Gemini — güncel takma adlar">
+            <option value="gemini-flash-latest">gemini-flash-latest</option>
+            <option value="gemini-flash-lite-latest">gemini-flash-lite-latest</option>
+            <option value="gemini-pro-latest">gemini-pro-latest</option>
+          </optgroup>
+          <optgroup label="Gemini 2.5">
+            <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+            <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+            <option value="gemini-2.5-flash-lite" selected>gemini-2.5-flash-lite</option>
+            <option value="gemini-2.5-flash-image">gemini-2.5-flash-image</option>
+            <option value="gemini-2.5-flash-lite-preview-09-2025">gemini-2.5-flash-lite-preview-09-2025</option>
+            <option value="gemini-2.5-flash-preview-tts">gemini-2.5-flash-preview-tts</option>
+            <option value="gemini-2.5-pro-preview-tts">gemini-2.5-pro-preview-tts</option>
+            <option value="gemini-2.5-computer-use-preview-10-2025">gemini-2.5-computer-use-preview-10-2025</option>
+          </optgroup>
+          <optgroup label="Gemini 2.0">
+            <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+            <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
+            <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite</option>
+            <option value="gemini-2.0-flash-lite-001">gemini-2.0-flash-lite-001</option>
+          </optgroup>
+          <optgroup label="Gemma 3">
+            <option value="gemma-3-1b-it">gemma-3-1b-it</option>
+            <option value="gemma-3-4b-it">gemma-3-4b-it</option>
+            <option value="gemma-3-12b-it">gemma-3-12b-it</option>
+            <option value="gemma-3-27b-it">gemma-3-27b-it</option>
+            <option value="gemma-3n-e4b-it">gemma-3n-e4b-it</option>
+            <option value="gemma-3n-e2b-it">gemma-3n-e2b-it</option>
+          </optgroup>
+          <optgroup label="Gemini 3 — önizleme">
+            <option value="gemini-3-pro-preview">gemini-3-pro-preview</option>
+            <option value="gemini-3-flash-preview">gemini-3-flash-preview</option>
+            <option value="gemini-3.1-pro-preview">gemini-3.1-pro-preview</option>
+            <option value="gemini-3.1-pro-preview-customtools">gemini-3.1-pro-preview-customtools</option>
+            <option value="gemini-3.1-flash-lite-preview">gemini-3.1-flash-lite-preview</option>
+            <option value="gemini-3-pro-image-preview">gemini-3-pro-image-preview</option>
+            <option value="gemini-3.1-flash-image-preview">gemini-3.1-flash-image-preview</option>
+          </optgroup>
+          <optgroup label="Diğer önizlemeler">
+            <option value="nano-banana-pro-preview">nano-banana-pro-preview</option>
+            <option value="gemini-robotics-er-1.5-preview">gemini-robotics-er-1.5-preview</option>
+            <option value="deep-research-pro-preview-12-2025">deep-research-pro-preview-12-2025</option>
+          </optgroup>
+        </select>
+
+        <p id="api-help" class="mt-3 flex gap-2 text-xs leading-relaxed text-slate-500">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+          <span>Anahtar ve seçilen model bu oturumda tarayıcınızda saklanır. API <code class="rounded bg-slate-800 px-1 py-0.5 text-slate-400">v1beta</code> · <strong class="font-medium text-slate-400">ücretsiz kota</strong>: sık analizde kısa ara verin; kotalar modele göre değişir.</span>
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="upload-heading"
+        class="rounded-xl border border-slate-700 bg-slate-800/50 p-4 sm:p-5"
+      >
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div class="min-w-0 flex-1">
+            <h2 id="upload-heading" class="flex items-center gap-2 text-sm font-semibold text-slate-200">
+              <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400" aria-hidden="true">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008H12V8.25Z" />
+                </svg>
+              </span>
+              Sözleşme fotoğrafı veya PDF
+            </h2>
+            <p class="mt-1.5 pl-[2.75rem] text-xs leading-relaxed text-slate-500 lg:pl-0">
+              Metin yapıştırmak yerine taranmış sayfa veya ekran görüntüsü yükleyin; PDF tek dosya olarak desteklenir. İsterseniz metin kutusuna ek not da ekleyebilirsiniz.
+            </p>
+          </div>
+          <div class="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center lg:flex-col xl:flex-row">
+            <input
+              id="contract-file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif,.pdf,application/pdf"
+              class="sr-only"
+              aria-describedby="upload-hint"
+            />
+            <label
+              for="contract-file"
+              class="inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-lg border border-amber-500/50 bg-amber-500/10 px-4 py-2.5 text-sm font-semibold text-amber-400 transition hover:border-amber-400 hover:bg-amber-500/20 focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500/50"
+            >
+              <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+              </svg>
+              Sözleşme fotoğrafı yükle
+            </label>
+            <span id="upload-hint" class="text-center text-[11px] text-slate-600 sm:text-left lg:text-center xl:text-left">
+              JPG, PNG, WebP, GIF veya PDF · en fazla 15 MB
+            </span>
+          </div>
+        </div>
+
+        <div
+          id="file-preview-wrap"
+          class="mt-4 hidden rounded-xl border border-slate-600/80 bg-slate-900/60 p-4"
+          aria-live="polite"
+        >
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <div class="relative shrink-0 overflow-hidden rounded-lg border border-slate-600 bg-slate-950">
+              <img
+                id="file-preview-img"
+                src=""
+                alt="Yüklenen sözleşme önizlemesi"
+                class="hidden max-h-52 w-full max-w-md object-contain object-top sm:max-w-xs"
+              />
+              <div
+                id="file-preview-pdf"
+                class="hidden flex h-36 w-full min-w-[200px] max-w-xs flex-col items-center justify-center gap-2 bg-slate-800/90 px-4 text-center"
+              >
+                <svg class="h-12 w-12 text-red-400/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+                <span class="text-xs font-medium text-slate-400">PDF belgesi</span>
+              </div>
+            </div>
+            <div class="min-w-0 flex-1 space-y-2">
+              <p id="file-preview-name" class="break-all text-sm font-medium text-slate-200"></p>
+              <p id="file-preview-meta" class="text-xs text-slate-500"></p>
+              <button
+                type="button"
+                id="file-remove-btn"
+                class="inline-flex items-center gap-1.5 rounded-lg border border-slate-600 px-3 py-1.5 text-xs font-medium text-slate-400 transition hover:border-red-500/50 hover:bg-red-950/30 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+              >
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                Dosyayı kaldır
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="contract-label" class="flex flex-1 flex-col gap-3">
+        <div class="flex flex-wrap items-end justify-between gap-2">
+          <label id="contract-label" for="contract-text" class="flex items-center gap-2 text-sm font-medium text-slate-300">
+            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400" aria-hidden="true">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+              </svg>
+            </span>
+            Sözleşme veya politika metni
+          </label>
+          <span id="char-hint" class="inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs text-slate-500">
+            <svg class="h-3.5 w-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <span id="char-count" aria-live="polite">0 / 32000 karakter</span>
+          </span>
+        </div>
+        <textarea
+          id="contract-text"
+          name="contract-text"
+          rows="12"
+          maxlength="32000"
+          aria-describedby="contract-hint"
+          placeholder="Metni buraya yapıştırın (ör. kullanıcı sözleşmesi, KVKK metni)…"
+          class="min-h-[200px] w-full flex-1 resize-y rounded-xl border border-slate-600 bg-slate-800/80 px-4 py-3 text-sm leading-relaxed text-slate-100 placeholder:text-slate-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+        ></textarea>
+        <p id="contract-hint" class="flex items-start gap-2 text-xs text-slate-500">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-amber-500/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+          </svg>
+          <span>Çok uzun metinler model sınırına takılabilir; gerekirse bölümler halinde analiz edin. Dosya yüklediyseniz analiz öncelikle görsel/PDF üzerinden yapılır; kutuya yazdığınız metin isteğe bağlı ek bağlam olarak gönderilir.</span>
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            id="analyze-btn"
+            disabled
+            class="inline-flex min-h-[44px] min-w-[140px] items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow transition hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            <span id="analyze-btn-label">Analiz Et</span>
+          </button>
+          <button
+            type="button"
+            id="reset-btn"
+            class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-slate-600 bg-transparent px-4 py-2.5 text-sm font-medium text-slate-300 hover:border-slate-500 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+          >
+            <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.134-2.09-2.201a37.816 37.816 0 0 0-4.09 0c-1.18.067-2.09 1.122-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+            </svg>
+            Sonuçları temizle
+          </button>
+        </div>
+      </section>
+
+      <div
+        id="loading-panel"
+        class="hidden flex items-center gap-4 rounded-xl border border-blue-500/30 bg-blue-950/40 px-4 py-3.5 text-sm text-blue-200"
+        role="status"
+        aria-live="polite"
+        aria-busy="false"
+      >
+        <span class="relative flex h-10 w-10 shrink-0 items-center justify-center" aria-hidden="true">
+          <span class="absolute h-10 w-10 animate-spin rounded-full border-2 border-blue-400/30 border-t-blue-400"></span>
+          <svg class="relative h-5 w-5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+          </svg>
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="font-medium text-blue-100">Dedektif inceliyor</p>
+          <p id="loading-detail" class="text-xs text-blue-300/90">Sözleşme metni okunuyor, lütfen bekleyin…</p>
+        </div>
+      </div>
+
+      <div id="form-error" class="hidden flex items-start gap-3 rounded-lg border border-red-500/50 bg-red-950/50 px-4 py-3" role="alert">
+        <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+        </svg>
+        <p id="form-error-text" class="min-w-0 flex-1 text-sm leading-relaxed text-red-200"></p>
+      </div>
+
+      <section
+        id="results"
+        class="hidden flex flex-col gap-6 rounded-xl border border-slate-700 bg-slate-800/40 p-5 sm:p-6"
+        aria-live="polite"
+      >
+        <div class="rounded-xl border border-blue-500/20 bg-slate-900/40 p-4">
+          <h2 class="mb-3 flex items-center gap-3 text-lg font-semibold text-blue-400">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400" aria-hidden="true">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+              </svg>
+            </span>
+            Özet
+          </h2>
+          <p id="result-ozet" class="text-sm leading-relaxed text-slate-300"></p>
+        </div>
+        <div class="rounded-xl border border-red-500/25 bg-red-950/20 p-4">
+          <h2 class="mb-3 flex items-center gap-3 text-lg font-semibold text-red-400">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/15 text-red-400" aria-hidden="true">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5m0 0V21m0-16.5h13.5a1.5 1.5 0 0 1 1.5 1.5v4.5a1.5 1.5 0 0 1-1.5 1.5H3z" />
+              </svg>
+            </span>
+            Kritik Riskler (Kırmızı Bayraklar)
+          </h2>
+          <ul id="result-riskler" class="list-none space-y-2 text-sm text-slate-300"></ul>
+        </div>
+        <div class="rounded-xl border border-amber-500/20 bg-amber-950/10 p-4">
+          <h2 class="mb-3 flex items-center gap-3 text-lg font-semibold text-amber-400">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-400" aria-hidden="true">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75.75V21a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-2.25M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+            </span>
+            Sadeleştirilmiş Açıklama
+          </h2>
+          <div id="result-sade" class="whitespace-pre-wrap text-sm leading-relaxed text-slate-300"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-10 border-t border-slate-700 pt-6">
+      <p class="flex flex-wrap items-center justify-center gap-2 text-center text-xs text-slate-600">
+        <svg class="h-4 w-4 text-amber-600/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        </svg>
+        <span>Sözleşme Dedektifi — HTML, Tailwind ve Gemini API (ücretsiz kota)</span>
+      </p>
+    </footer>
+  </div>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
