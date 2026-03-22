@@ -1,0 +1,25 @@
+# PRD: Sözleşme Dedektifi (Contract Detective)
+
+## 1. Ürün Özeti
+Sözleşme Dedektifi, uzun ve karmaşık hukuk metinlerini (Kullanıcı Sözleşmeleri, Gizlilik Politikaları vb.) saniyeler içinde analiz eden, kullanıcı aleyhine olabilecek "kırmızı bayrakları" tespit eden ve metni sade bir dile çeviren yapay zeka destekli bir web uygulamasıdır.
+
+## 2. Hedef Kitle
+- Dijital platformlara kayıt olan bireysel kullanıcılar.
+- Hukuki terimleri anlamakta zorlanan üniversite öğrencileri ve internet kullanıcıları.
+
+## 3. Kullanıcı Akışı (User Flow)
+1. Kullanıcı uygulamayı açar ve ana sayfadaki metin kutusunu görür.
+2. Sözleşme metnini kutuya yapıştırır.
+3. "Analiz Et" butonuna tıkla.
+4. Yapay zeka metni işler (Yükleniyor animasyonu gösterilir).
+5. Sonuçlar ekranında "Özet", "Kritik Riskler (Kırmızı Bayraklar)" ve "Sadeleştirilmiş Açıklama" bölümleri görüntülenir.
+
+## 4. Teknik Gereksinimler (Tech Stack)
+- **Frontend:** HTML, CSS (Tailwind), JavaScript.
+- **AI:** Gemini API (Google AI Studio).
+- **Yayınlama:** Lovable veya Netlify.
+
+## 5. Minimum Uygulanabilir Ürün (MVP) Özellikleri
+- Metin girişi için geniş bir textarea.
+- Gemini API entegrasyonu ile risk analizi.
+- Sonuçların kategorize edilmiş şekilde gösterilmesi.
